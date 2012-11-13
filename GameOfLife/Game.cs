@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
+using System.Windows.Controls;
 using System.Windows.Threading;
 
 namespace GameOfLife
@@ -7,27 +9,37 @@ namespace GameOfLife
     public class Game
     {
         private readonly GameBoard _board;
+        private readonly TextBlock _generationDisplay;
         private DispatcherTimer _timer;
-        private int tickCount;
+        private int _generation;
 
-        public Game(GameBoard board)
+        public Game(GameBoard board, TextBlock generationDisplay)
         {
             _board = board;
+            _generationDisplay = generationDisplay;
         }
 
         public void Start()
         {
             _timer = new DispatcherTimer();
-            _timer.Tick += Tick;
+            _timer.Tick += FirstTick;
             _timer.Interval = TimeSpan.FromMilliseconds(2000);
             _timer.Start();
         }
 
+        private void FirstTick(object sender, EventArgs e)
+        {
+            _timer.Interval = TimeSpan.FromMilliseconds(400);
+            _timer.Tick -= FirstTick;
+            _timer.Tick += Tick;
+            Tick(sender, e);
+        }
+
         private void Tick(object sender, EventArgs eventArgs)
         {
-            tickCount += 1;
-            Debug.WriteLine("Tick " + tickCount);
-            _timer.Interval = TimeSpan.FromMilliseconds(400);
+            _generation += 1;
+            _generationDisplay.Text = _generation.ToString(NumberFormatInfo.InvariantInfo);
+
             _board.Prepare();
             Update();
             PostUpdate();
@@ -94,6 +106,12 @@ namespace GameOfLife
         public void Stop()
         {
             _timer.Stop();
+        }
+
+        public void SetTickInterval(TimeSpan interval)
+        {
+            _timer.Interval = interval;
+            Debug.WriteLine("Interval: " + _timer.Interval.TotalSeconds);
         }
     }
 }

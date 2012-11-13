@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using GameOfLife.Patterns;
@@ -18,6 +19,12 @@ namespace GameOfLife
             _name = name;
             InitializeComponent();
             Closing += Stop;
+            TickInterval.ValueChanged += ChangeTickInterval;
+        }
+
+        private void ChangeTickInterval(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            Game.SetTickInterval(TimeSpan.FromMilliseconds(TickInterval.Value));
         }
 
         private void Stop(object sender, CancelEventArgs e)

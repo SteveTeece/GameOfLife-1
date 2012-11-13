@@ -25,7 +25,7 @@ namespace GameOfLife
 
             var board = BoardFactory.CreateBoard(window, name);
 
-            var game = new Game(board);
+            var game = new Game(board, window.Generation);
             game.PostUpdate();
             game.Start();
 
@@ -53,7 +53,7 @@ namespace GameOfLife
             }
             var board = BoardFactory.CreateBoard(window, b);
 
-            var game = new Game(board);
+            var game = new Game(board, window.Generation);
             game.PostUpdate();
             game.Start();
 

@@ -1,2 +1,4 @@
+Input values for random patterns that are somewhat cool :)
+# Width, height, probability, seed
 20, 20, 0.5, 42
 20, 20, 0.5, 9
