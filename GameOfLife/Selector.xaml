@@ -1,0 +1,34 @@
+﻿<Window x:Class="GameOfLife.Selector" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Title="Selector" Height="600" Width="450">
+  <StackPanel Orientation="Vertical">
+    <Label Content="Still lifes:" />
+    <Button Content="Block" Click="Start" />
+    <Button Content="Beehive" Click="Start" />
+    <Button Content="Loaf" Click="Start" />
+    <Button Content="Boat" Click="Start" />
+
+    <Label Content="Oscillators:" />
+    <Button Content="Blinker" Click="Start" />
+    <Button Content="Toad" Click="Start" />
+    <Button Content="Beacon" Click="Start" />
+    <Button Content="Pulsar" Click="Start" />
+
+    <Label Content="Spaceships:" />
+    <Button Content="Glider" Click="Start" />
+    <Button Content="LWSS" Click="Start" />
+
+    <Label Content="Random:" />
+
+    <StackPanel Orientation="Horizontal">
+      <Label Content="W:" />
+      <TextBox x:Name="RandomWidth" Text="10" />
+      <Label Content="H:" />
+      <TextBox x:Name="RandomHeight" Text="10" />
+      <Label Content="P:" />
+      <TextBox x:Name="RandomProbability" Text="0.5" />
+      <Label Content="S:" />
+      <TextBox x:Name="RandomSeed" Text="42" />
+      <Button Content="Create" Click="StartRandom" />
+    </StackPanel>
+  </StackPanel>
+</Window>
