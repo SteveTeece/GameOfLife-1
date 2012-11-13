@@ -40,9 +40,12 @@ namespace GameOfLife
             _generation += 1;
             _generationDisplay.Text = _generation.ToString(NumberFormatInfo.InvariantInfo);
 
+            DateTime before = DateTime.UtcNow;
             _board.Prepare();
             Update();
             PostUpdate();
+            TimeSpan used = DateTime.UtcNow - before;
+            Debug.WriteLine(used.TotalSeconds);
         }
 
         public void Update()
