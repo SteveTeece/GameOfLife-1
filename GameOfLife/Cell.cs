@@ -6,44 +6,25 @@ namespace GameOfLife
     public class Cell
     {
         private static readonly Brush _alive = new SolidColorBrush(Colors.Black);
-        private static readonly Brush _dead = new SolidColorBrush(Colors.Red);
         private static readonly Brush _none = new SolidColorBrush(Colors.White);
 
         public readonly Border VisualBox = new Border();
-        private int _sinceAlive;
+        private bool _isAlive;
         public bool WasAlive;
         public int NeighboursAlive;
 
         public void Update(bool alive)
         {
-            if (alive)
+            if (alive != _isAlive)
             {
-                if (_sinceAlive != 10)
-                {
-                    VisualBox.Background = _alive;
-                }
-                _sinceAlive = 10;
-            }
-            else
-            {
-                if (_sinceAlive > 0)
-                {
-                    if (_sinceAlive == 10)
-                    {
-                        VisualBox.Background = _none;// _dead;
-                    }
-                    else if (_sinceAlive == 1)
-                    {
-                        VisualBox.Background = _none;
-                    }
-                    _sinceAlive -= 1;
-                }
+                _isAlive = alive;
+                VisualBox.Background = alive ? _alive : _none;
             }
         }
 
         public void PostUpdate()
         {
-            WasAlive = _sinceAlive == 10;
+            WasAlive = _isAlive;
             NeighboursAlive = 0;
         }
 
