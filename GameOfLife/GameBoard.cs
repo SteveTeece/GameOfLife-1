@@ -5,10 +5,10 @@ namespace GameOfLife
 {
     public class GameBoard
     {
-        private readonly MainWindow _window;
+        private readonly BoardWindow _window;
         public Cell[,] Cells;
 
-        public GameBoard(MainWindow window, int width, int height)
+        public GameBoard(BoardWindow window, int width, int height)
         {
             _window = window;
             _window.SetSize(width, height);

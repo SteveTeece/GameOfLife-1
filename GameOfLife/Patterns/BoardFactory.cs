@@ -24,7 +24,7 @@ namespace GameOfLife.Patterns
                     {"Beacon", OscillatorsPatterns.Beacon},
                 };
 
-        public static GameBoard CreateBoard(MainWindow window, string name)
+        public static GameBoard CreateBoard(BoardWindow window, string name)
         {
             if (stringBoards.ContainsKey(name))
             {
@@ -33,7 +33,7 @@ namespace GameOfLife.Patterns
             return CreateBoard(window, intBoards[name]);
         }
 
-        public static GameBoard CreateBoard(MainWindow window, string[] state)
+        public static GameBoard CreateBoard(BoardWindow window, string[] state)
         {
             int w = state[0].Length;
             int h = state.Length;
@@ -51,7 +51,7 @@ namespace GameOfLife.Patterns
             return board;
         }
 
-        public static GameBoard CreateBoard(MainWindow window, int[,] state)
+        public static GameBoard CreateBoard(BoardWindow window, int[,] state)
         {
             int w = state.GetLength(1);
             int h = state.GetLength(0);

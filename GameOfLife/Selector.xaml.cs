@@ -21,7 +21,7 @@ namespace GameOfLife
             var button = (Button)sender;
 
             var name = button.Content.ToString();
-            var window = new MainWindow(name);
+            var window = new BoardWindow(name);
 
             var board = BoardFactory.CreateBoard(window, name);
 
@@ -36,7 +36,7 @@ namespace GameOfLife
         private void StartRandom(object sender, RoutedEventArgs e)
         {
             var name = "Random";
-            var window = new MainWindow(name);
+            var window = new BoardWindow(name);
 
             int width = int.Parse(RandomWidth.Text, NumberFormatInfo.InvariantInfo);
             int height = int.Parse(RandomHeight.Text, NumberFormatInfo.InvariantInfo);
