@@ -23,7 +23,7 @@ namespace GameOfLife
         {
             _timer = new DispatcherTimer();
             _timer.Tick += FirstTick;
-            _timer.Interval = TimeSpan.FromMilliseconds(2000);
+            _timer.Interval = TimeSpan.FromMilliseconds(1500);
             _timer.Start();
         }
 

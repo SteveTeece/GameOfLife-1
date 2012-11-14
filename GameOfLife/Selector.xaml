@@ -1,5 +1,5 @@
 ﻿<Window x:Class="GameOfLife.Selector" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Title="Selector" Height="600" Width="450">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Title="Selector" Height="650" Width="450">
   <StackPanel Orientation="Vertical">
     <Label Content="Still lifes:" />
     <Button Content="Block" Click="Start" />
@@ -16,6 +16,17 @@
     <Label Content="Spaceships:" />
     <Button Content="Glider" Click="Start" />
     <Button Content="LWSS" Click="Start" />
+
+    <Label Content="Methuselahs:" />
+    <Button Content="R-pentomino" Click="Start" />
+    <Button Content="Diehard" Click="Start" />
+    <Button Content="Acorn" Click="Start" />
+
+    <Label Content="Infinite patterns:" />
+    <Button Content="GosperGliderGun" Click="Start" />
+    <Button Content="Inf2" Click="Start" />
+    <Button Content="Inf3" Click="Start" />
+    <Button Content="Inf4" Click="Start" />
 
     <Label Content="Random:" />
 

@@ -11,6 +11,13 @@ namespace GameOfLife.Patterns
                     {"Pulsar", OscillatorsPatterns.Pulsar},
                     {"Glider", SpaceshipsPatterns.Glider},
                     {"LWSS", SpaceshipsPatterns.Lwss},
+                    {"R-pentomino", MethuselahsPatterns.Rpentomino},
+                    {"Diehard", MethuselahsPatterns.Diehard},
+                    {"Acorn", MethuselahsPatterns.Acorn},
+                    {"GosperGliderGun", InfinitePatterns.GosperGliderGun},
+                    {"Inf2", InfinitePatterns.Inf2},
+                    {"Inf3", InfinitePatterns.Inf3},
+                    {"Inf4", InfinitePatterns.Inf4},
                 };
 
         private static Dictionary<string, int[,]> intBoards =
