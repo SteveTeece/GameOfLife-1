@@ -14,9 +14,12 @@
       <ColumnDefinition Width="Auto" />
       <ColumnDefinition Width="Auto" />
     </Grid.ColumnDefinitions>
-    <Grid x:Name="myGrid"
-          Grid.ColumnSpan="3">
-    </Grid>
+
+    <Image x:Name="image"
+           Grid.ColumnSpan="3"
+           Stretch="Fill"
+           RenderOptions.BitmapScalingMode="NearestNeighbor"
+           RenderOptions.EdgeMode="Aliased" />
 
     <Slider x:Name="TickInterval"
             Grid.Row="1"

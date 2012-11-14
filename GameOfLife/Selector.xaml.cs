@@ -26,7 +26,6 @@ namespace GameOfLife
             Game game = BoardFactory.CreateGame(window, name);
             game.Start();
 
-            window.Game = game;
             window.Show();
         }
 
@@ -51,7 +50,6 @@ namespace GameOfLife
             var game = BoardFactory.CreateGame(window, b);
             game.Start();
 
-            window.Game = game;
             window.Show();
         }
     }

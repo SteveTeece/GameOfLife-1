@@ -32,6 +32,8 @@ namespace GameOfLife
 
         public void Start()
         {
+            _board.Draw(_alives);
+
             _timer = new DispatcherTimer();
             _timer.Tick += FirstTick;
             _timer.Interval = TimeSpan.FromMilliseconds(1500);
@@ -52,13 +54,26 @@ namespace GameOfLife
             _generation += 1;
             _generationDisplay.Text = _generation.ToString(NumberFormatInfo.InvariantInfo);
 
-            DateTime before = DateTime.UtcNow;
+            DateTime t0 = DateTime.UtcNow;
             _board.Prepare();
+            DateTime t1 = DateTime.UtcNow;
             Update();
+            DateTime t4 = DateTime.UtcNow;
             PostUpdate();
-            TimeSpan used = DateTime.UtcNow - before;
-            Debug.WriteLine(used.TotalSeconds);
+            DateTime t5 = DateTime.UtcNow;
+            _board.Draw(_alives);
+            DateTime t6 = DateTime.UtcNow;
+            Debug.WriteLine("1:{0}, 2:{1}, 3:{2}, 4:{3}, 5:{4}, 6:{5}",
+                            (int)(t1 - t0).TotalMilliseconds,
+                            (int)(t2 - t1).TotalMilliseconds,
+                            (int)(t3 - t2).TotalMilliseconds,
+                            (int)(t4 - t3).TotalMilliseconds,
+                            (int)(t5 - t4).TotalMilliseconds,
+                            (int)(t6 - t5).TotalMilliseconds);
         }
+
+        private DateTime t2;
+        private DateTime t3;
 
         public void Update()
         {
@@ -68,6 +83,7 @@ namespace GameOfLife
             {
                 AddNeighbourAlive(maybeBorn, cells, cell.X, cell.Y);
             }
+            t2 = DateTime.UtcNow;
 
             var newAlives = new List<Cell>(_alives.Count);
             foreach (Cell cell in _alives)
@@ -81,6 +97,8 @@ namespace GameOfLife
                     cell.Update(false);
                 }
             }
+            t3 = DateTime.UtcNow;
+
             foreach (Cell cell in maybeBorn)
             {
                 if (cell.NeighboursAlive == 3)

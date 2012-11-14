@@ -1,15 +1,15 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows;
-using System.Windows.Controls;
-using GameOfLife.Patterns;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace GameOfLife
 {
     /// <summary>
     /// Interaction logic for BoardWindow.xaml
     /// </summary>
-    public partial class BoardWindow : Window
+    public partial class BoardWindow
     {
         private readonly string _name;
         public Game Game;
@@ -32,19 +32,19 @@ namespace GameOfLife
             Game.Stop();
         }
 
-        public void SetSize(int width, int height)
+        public WriteableBitmap SetSize(int width, int height)
         {
             Title = _name + " (" + width + ", " + height + ")";
-            myGrid.ColumnDefinitions.Clear();
-            myGrid.RowDefinitions.Clear();
-            for (int i = 0; i < width; i++)
-            {
-                myGrid.ColumnDefinitions.Add(new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)});
-            }
-            for (int i = 0; i < height; i++)
-            {
-                myGrid.RowDefinitions.Add(new RowDefinition {Height = new GridLength(1, GridUnitType.Star)});
-            }
+
+            var bitmap = new WriteableBitmap(
+                width,
+                height,
+                96,
+                96,
+                PixelFormats.Bgr32,
+                null);
+            image.Source = bitmap;
+            return bitmap;
         }
     }
 }

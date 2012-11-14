@@ -1,25 +1,14 @@
-﻿using System.Windows.Controls;
-using System.Windows.Media;
-
-namespace GameOfLife
+﻿namespace GameOfLife
 {
     public class Cell
     {
-        private static readonly Brush _alive = new SolidColorBrush(Colors.Black);
-        private static readonly Brush _none = new SolidColorBrush(Colors.White);
-
-        public readonly Border VisualBox = new Border();
         private bool _isAlive;
         public bool WasAlive;
         public int NeighboursAlive;
 
         public void Update(bool alive)
         {
-            if (alive != _isAlive)
-            {
-                _isAlive = alive;
-                VisualBox.Background = alive ? _alive : _none;
-            }
+            _isAlive = alive;
         }
 
         public void PostUpdate()
@@ -30,8 +19,6 @@ namespace GameOfLife
 
         public void Reposition(int x, int y)
         {
-            Grid.SetColumn(VisualBox, x);
-            Grid.SetRow(VisualBox, y);
             X = x;
             Y = y;
         }

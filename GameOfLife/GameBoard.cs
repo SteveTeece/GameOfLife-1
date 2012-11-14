@@ -1,18 +1,22 @@
 ﻿using System;
-using System.Windows.Controls;
+using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Media.Imaging;
 
 namespace GameOfLife
 {
     public class GameBoard
     {
         private readonly BoardWindow _window;
+        private WriteableBitmap _bitmap;
+        private int[] _whiteBitmap;
         public Cell[,] Cells;
 
         public GameBoard(BoardWindow window, int width, int height)
         {
             _window = window;
-            _window.SetSize(width, height);
-            Cells = new Cell[width,height];
+            Cells = new Cell[width, height];
+            SetDrawingSize(width, height);
         }
 
         public void Prepare()
@@ -80,30 +84,34 @@ namespace GameOfLife
 
         private void Resize(int newWidth, int widthOffset, int newHeight, int heightOffset)
         {
-            _window.SetSize(newWidth, newHeight);
-
             int w = Cells.GetLength(0);
             int h = Cells.GetLength(1);
             var newCells = new Cell[newWidth,newHeight];
-            _window.myGrid.Children.Clear();
             for (int x = 0; x < w; x++)
             {
                 for (int y = 0; y < h; y++)
                 {
                     var cell = Cells[x, y];
-                    if (cell != null)
+                    if (cell != null && cell.WasAlive)
                     {
-                        if (cell.WasAlive)
-                        {
-                            newCells[x + widthOffset, y + heightOffset] = cell;
-                            cell.Reposition(x + widthOffset, y + heightOffset);
-                            _window.myGrid.Children.Add(cell.VisualBox);
-                        }
+                        newCells[x + widthOffset, y + heightOffset] = cell;
+                        cell.Reposition(x + widthOffset, y + heightOffset);
                     }
                 }
             }
 
             Cells = newCells;
+            SetDrawingSize(newWidth, newHeight);
+        }
+
+        private void SetDrawingSize(int width, int height)
+        {
+            _bitmap = _window.SetSize(width, height);
+            _whiteBitmap = new int[width * height];
+            for (int i = 0; i < _whiteBitmap.Length; i++)
+            {
+                _whiteBitmap[i] = 0x00ffffff;
+            }
         }
 
         public Cell AddCell(int x, int y)
@@ -111,8 +119,41 @@ namespace GameOfLife
             var cell = new Cell();
             Cells[x, y] = cell;
             cell.Reposition(x, y);
-            _window.myGrid.Children.Add(cell.VisualBox);
             return cell;
+        }
+
+
+        public void Draw(List<Cell> alives)
+        {
+            int width = Cells.GetLength(0);
+            int height = Cells.GetLength(1);
+
+            // Reserve the back buffer for updates
+            WriteableBitmap bitmap = _bitmap;
+            bitmap.Lock();
+
+            // Clear to white
+            var rect = new Int32Rect(0, 0, width, height);
+            bitmap.WritePixels(rect, _whiteBitmap, bitmap.BackBufferStride, 0);
+
+            unsafe
+            {
+                // Get a pointer to the back buffer
+                int pBackBuffer = (int)bitmap.BackBuffer;
+                foreach (Cell cell in alives)
+                {
+                    // Find the address of the pixel to draw
+                    int p = pBackBuffer + (cell.Y * bitmap.BackBufferStride);
+                    p += cell.X * 4;
+                    *((int*)p) = 0;
+                }
+            }
+
+            // Specify the area of the bitmap that changed
+            bitmap.AddDirtyRect(new Int32Rect(0, 0, width, height));
+
+            // Release the back buffer and make it available for display
+            bitmap.Unlock();
         }
     }
 }

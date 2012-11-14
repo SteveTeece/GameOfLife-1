@@ -45,6 +45,7 @@ namespace GameOfLife.Patterns
             int h = state.Length;
             var board = new GameBoard(window, w + 4, h + 4);
             var game = new Game(board, window.Generation);
+            window.Game = game;
             for (int x = 0; x < w; x++)
             {
                 for (int y = 0; y < h; y++)
@@ -66,6 +67,7 @@ namespace GameOfLife.Patterns
             int h = state.GetLength(0);
             var board = new GameBoard(window, w + 4, h + 4);
             var game = new Game(board, window.Generation);
+            window.Game = game;
             for (int x = 0; x < w; x++)
             {
                 for (int y = 0; y < h; y++)
