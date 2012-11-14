@@ -32,6 +32,11 @@ namespace GameOfLife
         {
             Grid.SetColumn(VisualBox, x);
             Grid.SetRow(VisualBox, y);
+            X = x;
+            Y = y;
         }
+
+        public int X;
+        public int Y;
     }
 }

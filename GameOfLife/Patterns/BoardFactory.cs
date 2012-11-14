@@ -31,49 +31,54 @@ namespace GameOfLife.Patterns
                     {"Beacon", OscillatorsPatterns.Beacon},
                 };
 
-        public static GameBoard CreateBoard(BoardWindow window, string name)
+        public static Game CreateGame(BoardWindow window, string name)
         {
-            if (stringBoards.ContainsKey(name))
-            {
-                return CreateBoard(window, stringBoards[name]);
-            }
-            return CreateBoard(window, intBoards[name]);
+            Game game = stringBoards.ContainsKey(name)
+                            ? CreateGame(window, stringBoards[name])
+                            : CreateGame(window, intBoards[name]);
+            return game;
         }
 
-        public static GameBoard CreateBoard(BoardWindow window, string[] state)
+        public static Game CreateGame(BoardWindow window, string[] state)
         {
             int w = state[0].Length;
             int h = state.Length;
             var board = new GameBoard(window, w + 4, h + 4);
-            Cell[,] cells = board.Cells;
+            var game = new Game(board, window.Generation);
             for (int x = 0; x < w; x++)
             {
                 for (int y = 0; y < h; y++)
                 {
                     bool alive = state[y][x] == 'x';
-                    cells[x + 2, y + 2].Update(alive);
+                    if (alive)
+                    {
+                        game.InitAlive(x + 2, y + 2);
+                    }
                 }
             }
 
-            return board;
+            return game;
         }
 
-        public static GameBoard CreateBoard(BoardWindow window, int[,] state)
+        public static Game CreateGame(BoardWindow window, int[,] state)
         {
             int w = state.GetLength(1);
             int h = state.GetLength(0);
             var board = new GameBoard(window, w + 4, h + 4);
-            Cell[,] cells = board.Cells;
+            var game = new Game(board, window.Generation);
             for (int x = 0; x < w; x++)
             {
                 for (int y = 0; y < h; y++)
                 {
                     bool alive = state[y, x] == 1;
-                    cells[x + 2, y + 2].Update(alive);
+                    if (alive)
+                    {
+                        game.InitAlive(x + 2, y + 2);
+                    }
                 }
             }
 
-            return board;
+            return game;
         }
     }
 }

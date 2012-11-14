@@ -23,10 +23,7 @@ namespace GameOfLife
             var name = button.Content.ToString();
             var window = new BoardWindow(name);
 
-            var board = BoardFactory.CreateBoard(window, name);
-
-            var game = new Game(board, window.Generation);
-            game.PostUpdate();
+            Game game = BoardFactory.CreateGame(window, name);
             game.Start();
 
             window.Game = game;
@@ -51,10 +48,7 @@ namespace GameOfLife
                     b[x, y] = rand.NextDouble() < prob ? 1 : 0;
                 }
             }
-            var board = BoardFactory.CreateBoard(window, b);
-
-            var game = new Game(board, window.Generation);
-            game.PostUpdate();
+            var game = BoardFactory.CreateGame(window, b);
             game.Start();
 
             window.Game = game;

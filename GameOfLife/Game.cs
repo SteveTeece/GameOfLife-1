@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Windows.Controls;
@@ -13,10 +14,20 @@ namespace GameOfLife
         private DispatcherTimer _timer;
         private int _generation;
 
+        private List<Cell> _alives = new List<Cell>();
+
         public Game(GameBoard board, TextBlock generationDisplay)
         {
             _board = board;
             _generationDisplay = generationDisplay;
+        }
+
+        public void InitAlive(int x, int y)
+        {
+            Cell cell = _board.AddCell(x, y);
+            _alives.Add(cell);
+            cell.Update(true);
+            cell.PostUpdate();
         }
 
         public void Start()
@@ -32,6 +43,7 @@ namespace GameOfLife
             _timer.Interval = TimeSpan.FromMilliseconds(400);
             _timer.Tick -= FirstTick;
             _timer.Tick += Tick;
+
             Tick(sender, e);
         }
 
@@ -51,44 +63,62 @@ namespace GameOfLife
         public void Update()
         {
             Cell[,] cells = _board.Cells;
-            int w = cells.GetLength(0);
-            int h = cells.GetLength(1);
-
-            for (int x = 1; x < w - 1; x++)
+            var maybeBorn = new List<Cell>(_alives.Count);
+            foreach (Cell cell in _alives)
             {
-                for (int y = 1; y < h - 1; y++)
-                {
-                    if (cells[x, y].WasAlive)
-                    {
-                        UpdateNeighborCount(cells, x, y);
-                    }
-                }
+                AddNeighbourAlive(maybeBorn, cells, cell.X, cell.Y);
             }
 
-            for (int x = 1; x < w - 1; x++)
+            var newAlives = new List<Cell>(_alives.Count);
+            foreach (Cell cell in _alives)
             {
-                for (int y = 1; y < h - 1; y++)
+                if (cell.NeighboursAlive == 2 || cell.NeighboursAlive == 3)
                 {
-                    Cell cell = cells[x, y];
-                    bool alive = cell.NeighboursAlive == 3 || (cell.WasAlive && cell.NeighboursAlive == 2);
-                    cell.Update(alive);
+                    newAlives.Add(cell);
+                }
+                else
+                {
+                    cell.Update(false);
                 }
             }
+            foreach (Cell cell in maybeBorn)
+            {
+                if (cell.NeighboursAlive == 3)
+                {
+                    newAlives.Add(cell);
+                    cell.Update(true);
+                }
+            }
+            _alives = newAlives;
         }
 
-        private void UpdateNeighborCount(Cell[,] cells, int x, int y)
+        private void AddNeighbourAlive(List<Cell> maybeBorn, Cell[,] cells, int x, int y)
         {
             // above
-            cells[x - 1, y - 1].NeighboursAlive += 1;
-            cells[x + 0, y - 1].NeighboursAlive += 1;
-            cells[x + 1, y - 1].NeighboursAlive += 1;
+            CountNeighbour(maybeBorn, cells, x - 1, y - 1);
+            CountNeighbour(maybeBorn, cells, x + 0, y - 1);
+            CountNeighbour(maybeBorn, cells, x + 1, y - 1);
             // sides
-            cells[x - 1, y + 0].NeighboursAlive += 1;
-            cells[x + 1, y + 0].NeighboursAlive += 1;
+            CountNeighbour(maybeBorn, cells, x - 1, y + 0);
+            CountNeighbour(maybeBorn, cells, x + 1, y + 0);
             // below
-            cells[x - 1, y + 1].NeighboursAlive += 1;
-            cells[x + 0, y + 1].NeighboursAlive += 1;
-            cells[x + 1, y + 1].NeighboursAlive += 1;
+            CountNeighbour(maybeBorn, cells, x - 1, y + 1);
+            CountNeighbour(maybeBorn, cells, x + 0, y + 1);
+            CountNeighbour(maybeBorn, cells, x + 1, y + 1);
+        }
+
+        private void CountNeighbour(List<Cell> maybeBorn, Cell[,] cells, int x, int y)
+        {
+            Cell c = cells[x, y];
+            if (c == null)
+            {
+                c = _board.AddCell(x, y);
+            }
+            int n = c.NeighboursAlive += 1;
+            if (!c.WasAlive && n == 3)
+            {
+                maybeBorn.Add(c);
+            }
         }
 
         public void PostUpdate()
@@ -101,7 +131,11 @@ namespace GameOfLife
             {
                 for (int y = 0; y < h; y++)
                 {
-                    cells[x, y].PostUpdate();
+                    Cell cell = cells[x, y];
+                    if (cell != null)
+                    {
+                        cells[x, y].PostUpdate();
+                    }
                 }
             }
         }

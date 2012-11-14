@@ -13,16 +13,6 @@ namespace GameOfLife
             _window = window;
             _window.SetSize(width, height);
             Cells = new Cell[width,height];
-            for (int x = 0; x < width; x++)
-            {
-                for (int y = 0; y < height; y++)
-                {
-                    var cell = new Cell();
-                    cell.Reposition(x, y);
-                    Cells[x, y] = cell;
-                    _window.myGrid.Children.Add(cell.VisualBox);
-                }
-            }
         }
 
         public void Prepare()
@@ -36,7 +26,8 @@ namespace GameOfLife
             // check top row - increase height
             for (int x = 0; x < w; x++)
             {
-                if (Cells[x, 1].WasAlive)
+                Cell cell = Cells[x, 1];
+                if (cell != null && cell.WasAlive)
                 {
                     ho = CalculateDelta(h);
                     hd += ho;
@@ -46,7 +37,8 @@ namespace GameOfLife
             // check bottom row - increase height
             for (int x = 0; x < w; x++)
             {
-                if (Cells[x, h - 2].WasAlive)
+                Cell cell = Cells[x, h - 2];
+                if (cell != null && cell.WasAlive)
                 {
                     hd += CalculateDelta(h);
                     break;
@@ -55,7 +47,8 @@ namespace GameOfLife
             // check left column - increase width
             for (int y = 0; y < h; y++)
             {
-                if (Cells[1, y].WasAlive)
+                Cell cell = Cells[1, y];
+                if (cell != null && cell.WasAlive)
                 {
                     wo = CalculateDelta(w);
                     wd += wo;
@@ -65,7 +58,8 @@ namespace GameOfLife
             // check right column - increase width
             for (int y = 0; y < h; y++)
             {
-                if (Cells[w - 2, y].WasAlive)
+                Cell cell = Cells[w - 2, y];
+                if (cell != null && cell.WasAlive)
                 {
                     wd += CalculateDelta(w);
                     break;
@@ -91,31 +85,34 @@ namespace GameOfLife
             int w = Cells.GetLength(0);
             int h = Cells.GetLength(1);
             var newCells = new Cell[newWidth,newHeight];
+            _window.myGrid.Children.Clear();
             for (int x = 0; x < w; x++)
             {
                 for (int y = 0; y < h; y++)
                 {
                     var cell = Cells[x, y];
-                    newCells[x + widthOffset, y + heightOffset] = cell;
-                    cell.Reposition(x + widthOffset, y + heightOffset);
-                }
-            }
-
-            for (int x = 0; x < newWidth; x++)
-            {
-                for (int y = 0; y < newHeight; y++)
-                {
-                    if (newCells[x, y] == null)
+                    if (cell != null)
                     {
-                        var cell = new Cell();
-                        cell.Reposition(x, y);
-                        newCells[x, y] = cell;
-                        _window.myGrid.Children.Add(cell.VisualBox);
+                        if (cell.WasAlive)
+                        {
+                            newCells[x + widthOffset, y + heightOffset] = cell;
+                            cell.Reposition(x + widthOffset, y + heightOffset);
+                            _window.myGrid.Children.Add(cell.VisualBox);
+                        }
                     }
                 }
             }
 
             Cells = newCells;
+        }
+
+        public Cell AddCell(int x, int y)
+        {
+            var cell = new Cell();
+            Cells[x, y] = cell;
+            cell.Reposition(x, y);
+            _window.myGrid.Children.Add(cell.VisualBox);
+            return cell;
         }
     }
 }
