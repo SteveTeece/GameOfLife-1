@@ -122,7 +122,6 @@ namespace GameOfLife
             return cell;
         }
 
-
         public void Draw(List<Cell> alives)
         {
             int width = Cells.GetLength(0);

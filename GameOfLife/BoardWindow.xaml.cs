@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -13,6 +14,8 @@ namespace GameOfLife
     {
         private readonly string _name;
         public Game Game;
+
+        private bool _isFullScreen;
 
         public BoardWindow(string name)
         {
@@ -45,6 +48,55 @@ namespace GameOfLife
                 null);
             image.Source = bitmap;
             return bitmap;
+        }
+
+        private void OnImageMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (_isFullScreen)
+            {
+                ExitFullScreen();
+            }
+            else if (e.ClickCount == 2)
+            {
+                EnterFullScreen();
+            }
+        }
+
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (_isFullScreen)
+            {
+                if (e.Key == Key.Escape)
+                {
+                    ExitFullScreen();
+                }
+            }
+            else
+            {
+                if (e.Key == Key.F11 ||
+                    (e.Key == Key.Enter && (Keyboard.Modifiers & ModifierKeys.Alt) != 0))
+                {
+                    EnterFullScreen();
+                }
+            }
+        }
+
+        private void EnterFullScreen()
+        {
+            _isFullScreen = true;
+            Footer.Height = new GridLength(0);
+            WindowStyle = WindowStyle.None;
+            Topmost = true;
+            WindowState = WindowState.Maximized;
+        }
+
+        private void ExitFullScreen()
+        {
+            _isFullScreen = false;
+            WindowStyle = WindowStyle.SingleBorderWindow;
+            Topmost = false;
+            WindowState = WindowState.Normal;
+            Footer.Height = GridLength.Auto;
         }
     }
 }

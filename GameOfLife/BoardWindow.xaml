@@ -3,11 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="BoardWindow"
         Height="520"
-        Width="500">
+        Width="500"
+        PreviewKeyDown="Window_PreviewKeyDown">
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="*" />
-      <RowDefinition Height="Auto" />
+      <RowDefinition x:Name="Footer" Height="Auto" />
     </Grid.RowDefinitions>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="*" />
@@ -19,7 +20,8 @@
            Grid.ColumnSpan="3"
            Stretch="Fill"
            RenderOptions.BitmapScalingMode="NearestNeighbor"
-           RenderOptions.EdgeMode="Aliased" />
+           RenderOptions.EdgeMode="Aliased"
+           MouseDown="OnImageMouseDown"/>
 
     <Slider x:Name="TickInterval"
             Grid.Row="1"
