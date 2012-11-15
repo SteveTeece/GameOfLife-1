@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using GameOfLife.Patterns;
@@ -62,22 +63,27 @@ namespace GameOfLife
             var openFileDialog = new OpenFileDialog
                 {
                     DefaultExt = ".LIF",
-                    Filter = "Game of Life Patterns (.LIF)|*.LIF"
+                    Filter = "Game of Life Patterns (.LIF)|*.LIF",
+                    Multiselect = true
                 };
 
             var result = openFileDialog.ShowDialog(this);
             if (result != true) return;
 
-            var path = openFileDialog.FileName;
-            var lifePattern = LifeParser.ParseFile(path);
+            Parallel.ForEach(openFileDialog.FileNames, path =>
+                {
+                    var lifePattern = LifeParser.ParseFile(path);
 
-            var name = Path.GetFileNameWithoutExtension(path);
-            var window = new BoardWindow(name);
+                    var name = Path.GetFileNameWithoutExtension(path);
 
-            Game game = BoardFactory.CreateGame(window, lifePattern);
-            game.Start();
+                    Dispatcher.BeginInvoke(new Action(() =>
+                        {
+                            var window = new BoardWindow(name);
+                            BoardFactory.CreateGame(window, lifePattern).Start();
 
-            window.Show();
+                            window.Show();
+                        }));
+                });
         }
     }
 }
