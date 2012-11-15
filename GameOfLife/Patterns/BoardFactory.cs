@@ -47,7 +47,7 @@ namespace GameOfLife.Patterns
             int h = pattern.Height;
 
             var board = new GameBoard(window, w, h);
-            var game = new Game(board, window.Generation);
+            var game = new Game(board, window.Generation, pattern.HasRules ? pattern.Rules : LifeRules.Normal);
             window.Game = game;
 
             foreach (var block in pattern.Blocks)

@@ -15,11 +15,11 @@ namespace GameOfLife.Patterns.Parser
 
         public string Description { get; set; }
 
-        public LifeRule Rule { get; set; }
+        public LifeRules Rules { get; set; }
 
-        public bool HasRule
+        public bool HasRules
         {
-            get { return Rule != null; }
+            get { return Rules != null; }
         }
 
         public List<LifePatternBlock> Blocks { get; set; } 

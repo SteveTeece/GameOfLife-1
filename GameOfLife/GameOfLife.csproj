@@ -62,7 +62,7 @@
     <Compile Include="Patterns\MethuselahsPatterns.cs" />
     <Compile Include="Patterns\Parser\LifePattern.cs" />
     <Compile Include="Patterns\Parser\LifePatternBlock.cs" />
-    <Compile Include="Patterns\Parser\LifeRule.cs" />
+    <Compile Include="Patterns\Parser\LifeRules.cs" />
     <Compile Include="Selector.xaml.cs">
       <DependentUpon>Selector.xaml</DependentUpon>
     </Compile>

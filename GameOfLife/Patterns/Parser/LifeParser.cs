@@ -32,10 +32,10 @@ namespace GameOfLife.Patterns.Parser
                             if (parts.Length > 1) pattern.AddDescription(parts[1]);
                             break;
                         case "#N":
-                            pattern.Rule = LifeRule.Normal;
+                            pattern.Rules = LifeRules.Normal;
                             break;
                         case "#R":
-                            pattern.Rule = CreateRule(parts[1]);
+                            pattern.Rules = CreateRule(parts[1]);
                             break;
                         case "#P":
                             if (currentPatternBlock != null) pattern.Blocks.Add(currentPatternBlock);
@@ -101,15 +101,15 @@ namespace GameOfLife.Patterns.Parser
             return new LifePatternBlock { OffsetX = int.Parse(offsetX), OffsetY = int.Parse(offsetY) };
         }
 
-        private static LifeRule CreateRule(string ruleString)
+        private static LifeRules CreateRule(string ruleString)
         {
             var rules = ruleString.Split('/');
-            return new LifeRule { SurvivalCount = GetCounts(rules[0]), BirthCount = GetCounts(rules[1]) };
+            return new LifeRules { SurvivalCounts = GetCounts(rules[0]), BirthCounts = GetCounts(rules[1]) };
         }
 
-        private static int[] GetCounts(string countString)
+        private static List<int> GetCounts(string countString)
         {
-            return countString.Select(count => int.Parse(count.ToString(CultureInfo.InvariantCulture))).ToArray();
+            return countString.Select(count => int.Parse(count.ToString(CultureInfo.InvariantCulture))).ToList();
         }
     }
 }
