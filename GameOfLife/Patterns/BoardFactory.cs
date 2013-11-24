@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 
+using GameOfLife.Patterns.Parser;
+
 namespace GameOfLife.Patterns
 {
     public static class BoardFactory
@@ -36,6 +38,31 @@ namespace GameOfLife.Patterns
             Game game = stringBoards.ContainsKey(name)
                             ? CreateGame(window, stringBoards[name])
                             : CreateGame(window, intBoards[name]);
+            return game;
+        }
+
+        public static Game CreateGame(BoardWindow window, LifePattern pattern)
+        {
+            int w = pattern.Width;
+            int h = pattern.Height;
+
+            var board = new GameBoard(window, w, h);
+            var game = new Game(board, window.Generation, pattern.HasRules ? pattern.Rules : LifeRules.Normal);
+            window.Game = game;
+
+            foreach (var block in pattern.Blocks)
+            {
+                for (int y = 0; y < block.Lines.Count; y++)
+                {
+                    for (int x = 0; x < block.Lines[y].Count; x++)
+                    {
+                        var isAlive = block.Lines[y][x];
+                        if (isAlive)
+                            game.InitAlive(block.OffsetX + x, block.OffsetY + y);
+                    }
+                }
+            }
+
             return game;
         }
 

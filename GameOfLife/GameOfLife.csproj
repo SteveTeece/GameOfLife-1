@@ -57,8 +57,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Patterns\Parser\LifeParser.cs" />
     <Compile Include="Patterns\InfinitePatterns.cs" />
     <Compile Include="Patterns\MethuselahsPatterns.cs" />
+    <Compile Include="Patterns\Parser\LifePattern.cs" />
+    <Compile Include="Patterns\Parser\LifePatternBlock.cs" />
+    <Compile Include="Patterns\Parser\LifeRules.cs" />
     <Compile Include="Selector.xaml.cs">
       <DependentUpon>Selector.xaml</DependentUpon>
     </Compile>
@@ -92,6 +96,7 @@
   <ItemGroup>
     <Resource Include="Randoms.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

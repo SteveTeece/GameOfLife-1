@@ -41,5 +41,6 @@
       <TextBox x:Name="RandomSeed" Text="42" />
       <Button Content="Create" Click="StartRandom" />
     </StackPanel>
+    <Button Content="Open Pattern..." Click="Open" />
   </StackPanel>
 </Window>

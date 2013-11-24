@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Threading;
+
+using GameOfLife.Patterns.Parser;
 
 namespace GameOfLife
 {
@@ -11,15 +14,22 @@ namespace GameOfLife
     {
         private readonly GameBoard _board;
         private readonly TextBlock _generationDisplay;
+
+        private readonly LifeRules _rules;
+
         private DispatcherTimer _timer;
         private int _generation;
 
         private List<Cell> _alives = new List<Cell>();
 
         public Game(GameBoard board, TextBlock generationDisplay)
+            : this(board, generationDisplay, LifeRules.Normal) { }
+
+        public Game(GameBoard board, TextBlock generationDisplay, LifeRules rules)
         {
             _board = board;
             _generationDisplay = generationDisplay;
+            _rules = rules;
         }
 
         public void InitAlive(int x, int y)
@@ -88,7 +98,7 @@ namespace GameOfLife
             var newAlives = new List<Cell>(_alives.Count);
             foreach (Cell cell in _alives)
             {
-                if (cell.NeighboursAlive == 2 || cell.NeighboursAlive == 3)
+                if (_rules.SurvivalCounts.Contains(cell.NeighboursAlive))
                 {
                     newAlives.Add(cell);
                 }
@@ -99,14 +109,12 @@ namespace GameOfLife
             }
             t3 = DateTime.UtcNow;
 
-            foreach (Cell cell in maybeBorn)
+            foreach (Cell cell in maybeBorn.Where(cell => _rules.BirthCounts.Contains(cell.NeighboursAlive)))
             {
-                if (cell.NeighboursAlive == 3)
-                {
-                    newAlives.Add(cell);
-                    cell.Update(true);
-                }
+                newAlives.Add(cell);
+                cell.Update(true);
             }
+
             _alives = newAlives;
         }
 
@@ -127,11 +135,7 @@ namespace GameOfLife
 
         private void CountNeighbour(List<Cell> maybeBorn, Cell[,] cells, int x, int y)
         {
-            Cell c = cells[x, y];
-            if (c == null)
-            {
-                c = _board.AddCell(x, y);
-            }
+            Cell c = cells[x, y] ?? _board.AddCell(x, y);
             int n = c.NeighboursAlive += 1;
             if (!c.WasAlive && n == 3)
             {
